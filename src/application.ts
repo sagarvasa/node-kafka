@@ -34,6 +34,9 @@ export class ServerApplication {
     // Initialize Database
     this.initializeDatabase();
 
+    // Initialize kafka
+    this.initKafka();
+
     // Serve incoming routes
     this.serveRequest();
   }
@@ -54,7 +57,19 @@ export class ServerApplication {
       await mongoHelper.establishConnection();
     } catch (e) {
       this.logger.error(
-        "[boilerplate] Error in connecting database:: [error]: " + e.message
+        "[node-kafka] Error in connecting database:: [error]: " + e.message
+      );
+    }
+  }
+
+  private async initKafka() {
+    try {
+      const connection = await import("./helpers/kafka-helper");
+      new connection.KafkaHelper();
+      require("./events/kafka");
+    } catch (e) {
+      this.logger.error(
+        "[node-kafka] Error in connecting kafka:: [error]: " + e.message
       );
     }
   }
@@ -117,7 +132,7 @@ export class ServerApplication {
 
       if (req.body && Object.keys(req.body).length) {
         this.logger.info(
-          "[boilerplate][URL]: " +
+          "[node-kafka][URL]: " +
             req.path +
             " [Body] : " +
             JSON.stringify(req.body),
@@ -127,7 +142,7 @@ export class ServerApplication {
       }
       if (req.headers && Object.keys(req.headers).length) {
         this.logger.info(
-          "[boilerplate][URL]: " +
+          "[node-kafka][URL]: " +
             req.path +
             " [Headers]: " +
             JSON.stringify(req.headers),
@@ -137,7 +152,7 @@ export class ServerApplication {
       }
       if (req.query && Object.keys(req.query).length) {
         this.logger.info(
-          "[boilerplate][URL]: " +
+          "[node-kafka][URL]: " +
             req.path +
             " [Query] : " +
             JSON.stringify(req.query),
@@ -147,7 +162,7 @@ export class ServerApplication {
       }
       if (req.params && Object.keys(req.params).length) {
         this.logger.info(
-          "[boilerplate][URL]: " +
+          "[node-kafka][URL]: " +
             req.path +
             " [Params] : " +
             JSON.stringify(req.params),
@@ -176,7 +191,7 @@ export class ServerApplication {
     this.app.use(
       (error: any, req: Request, res: Response, next: NextFunction) => {
         this.logger.info(
-          "[boilerplate][app][error] " + error.message,
+          "[node-kafka][app][error] " + error.message,
           res,
           true,
           error
@@ -202,7 +217,7 @@ export class ServerApplication {
           process.currentRes.get(Constants.CORR_ID);
       }
       this.logger.info(
-        "[boilerplate][uncaughtException][reason] " + error.message
+        "[node-kafka][uncaughtException][reason] " + error.message
       );
     });
 
@@ -217,7 +232,7 @@ export class ServerApplication {
           process.currentRes.get(Constants.CORR_ID);
       }
       this.logger.info(
-        "[boilerplate][unhandledRejection][reason] " + error.message
+        "[node-kafka][unhandledRejection][reason] " + error.message
       );
       return res.status(500).send({ message: ErrorConst.GENERAL_ERROR_MSG });
     });

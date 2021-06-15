@@ -28,9 +28,7 @@ export class MongoConnectionHelper {
       );
       return this.connectionObj;
     } catch (error) {
-      logger.error(
-        "[boilerplate] Establish connection error: " + error.message
-      );
+      logger.error("[node-kafka] Establish connection error: " + error.message);
       return Promise.reject(error);
     }
   }
@@ -43,7 +41,7 @@ export class MongoConnectionHelper {
       const db = this.connectionObj.db;
       return { client: this.connectionObj, db };
     } catch (err) {
-      logger.error("[boilerplate] Get connection error: " + err.message);
+      logger.error("[node-kafka] Get connection error: " + err.message);
       throw err;
     }
   }
@@ -54,7 +52,7 @@ export class MongoConnectionHelper {
         closeMongoConnection(connectionObj);
       }
     } catch (err) {
-      logger.warn("[boilerplate] Close connection error: " + err.message);
+      logger.warn("[node-kafka] Close connection error: " + err.message);
     }
   }
 }

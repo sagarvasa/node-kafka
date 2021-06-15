@@ -33,7 +33,7 @@ async function createMongoConnection(
     connection = mongoose.connection;
     return connection;
   } catch (e) {
-    logger.error("[boilerplate] db connection error: " + e.message);
+    logger.error("[node-kafka] db connection error: " + e.message);
     throw e;
   }
 }

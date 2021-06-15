@@ -7,4 +7,6 @@ export namespace Constants {
   export const ENV_LOCAL = "local";
   export const ENV_DEV = "dev";
   export const ENV_PROD = "production";
+
+  export const EVENT_SEND_NOTIFICATION = "send_notification";
 }
